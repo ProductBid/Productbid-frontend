@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# Antigravity / Gemini tool files
+.antigravity/
+.gemini/
+*.antigravity-cache
