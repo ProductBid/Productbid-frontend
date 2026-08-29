@@ -51,13 +51,16 @@ export function BidToClaimRank({
   const isControlled = value !== undefined;
   const currentBid = isControlled ? value : internalBid;
 
-  // Local string representation for smooth typing (e.g., allowing temporary editing)
+  // Local string representation for smooth typing (allowing backspacing and direct editing)
   const [typedValue, setTypedValue] = useState<string>(() => String(currentBid));
+  const [isFocused, setIsFocused] = useState(false);
 
-  // Synchronize typedValue when currentBid changes externally or via +/- buttons
+  // Synchronize typedValue when currentBid changes externally or via +/- buttons (when not actively typing)
   useEffect(() => {
-    setTypedValue(String(currentBid));
-  }, [currentBid]);
+    if (!isFocused) {
+      setTypedValue(String(currentBid));
+    }
+  }, [currentBid, isFocused]);
 
   // Keep bid valid if currentTopBid or minRequired increases
   useEffect(() => {
@@ -72,7 +75,7 @@ export function BidToClaimRank({
   }, [minRequired, currentBid, isControlled, onChange]);
 
   const updateBid = (nextAmount: number) => {
-    const clamped = nextAmount < minRequired ? minRequired : nextAmount;
+    const clamped = Math.max(minRequired, nextAmount);
     if (isControlled && onChange) {
       onChange(clamped);
     } else {
@@ -93,31 +96,36 @@ export function BidToClaimRank({
     updateBid(currentNum + stepAmount);
   };
 
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setIsFocused(true);
+    // Auto-select the entire current value so typing immediately replaces it
+    e.currentTarget.select();
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
-    const raw = e.target.value;
-    // Allow only numeric digits
-    const digitsOnly = raw.replace(/\D/g, "");
+    // Allow only numeric digits, directly setting the typed value (replacing, not concatenating)
+    const digitsOnly = e.target.value.replace(/\D/g, "");
+    setTypedValue(digitsOnly);
 
-    // If completely cleared or empty, keep at minRequired ($3)
-    if (digitsOnly === "") {
-      updateBid(minRequired);
-      return;
-    }
-
-    const num = Number(digitsOnly);
-    // Never allow the typed value to go below minRequired ($3)
-    if (num < minRequired) {
-      updateBid(minRequired);
-    } else {
-      updateBid(num);
+    if (digitsOnly !== "") {
+      const num = Number(digitsOnly);
+      if (num >= minRequired) {
+        if (isControlled && onChange) {
+          onChange(num);
+        } else {
+          setInternalBid(num);
+        }
+      }
     }
   };
 
   const handleInputBlur = () => {
+    setIsFocused(false);
     if (disabled) return;
     const num = Number(typedValue);
-    if (isNaN(num) || num < minRequired) {
+    if (isNaN(num) || num < minRequired || typedValue === "") {
+      // Revert/clamp to minRequired if below minimum or empty
       updateBid(minRequired);
     } else {
       updateBid(num);
@@ -175,13 +183,13 @@ export function BidToClaimRank({
             type="text"
             inputMode="numeric"
             pattern="[0-9]*"
-            min="3"
             value={typedValue}
+            onFocus={handleFocus}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             onKeyDown={handleKeyDown}
             disabled={disabled}
-            aria-label="Bid amount in dollars (minimum $3)"
+            aria-label="Bid amount in dollars"
             className="font-sora font-extrabold text-base sm:text-lg text-pb-primary bg-transparent outline-none tabular-nums text-left min-w-[1.8rem] max-w-[6rem] p-0 cursor-text"
             style={{
               width: `${Math.max(1.8, (typedValue.length || 1) * 1.1)}ch`,
