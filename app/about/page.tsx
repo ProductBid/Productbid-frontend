@@ -74,7 +74,7 @@ export default function AboutPage() {
           About
         </h1>
         <p className="text-lg sm:text-xl text-pb-text-secondary leading-relaxed">
-          No SignUp. No SignIn. No API keys. No Ads. ProductBid is a simple side project built for one thing — getting your product to #1.
+          ProductBid is an open source project designed to help startups get visibility through a bidding-based product discovery system.
         </p>
       </div>
 
