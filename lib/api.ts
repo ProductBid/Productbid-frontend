@@ -1,59 +1,17 @@
-import { Product, Category, DailyBoard, MarketStats, BidPayload } from "./types";
+import {
+  Product,
+  Category,
+  DailyBoard,
+  MarketStats,
+  BidPayload,
+  BackendCategory,
+  BackendLeaderboardEntry,
+  ResolveProductResponse,
+  InitiateBidResponse,
+  RankPreviewResponse,
+} from "./types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
-
-/**
- * ProductBid API Client Stubs
- * All endpoints point to the external Go + Fiber + PostgreSQL backend.
- * Stubs return zero/empty state by default so the UI renders in real empty state.
- */
-
-export async function fetchMarketStats(): Promise<MarketStats> {
-  // TODO: connect to Go backend (GET /api/stats)
-  try {
-    if (process.env.NEXT_PUBLIC_API_URL) {
-      const res = await fetch(`${API_BASE_URL}/stats`, { next: { revalidate: 10 } });
-      if (res.ok) return await res.json();
-    }
-  } catch (err) {
-    console.warn("Market stats fallback:", err);
-  }
-  return {
-    liveCount: 0,
-    totalBids: 0,
-    totalVolume: 0,
-    visitorsToday: 0,
-  };
-}
-
-export async function fetchLeaderboard(category?: string): Promise<Product[]> {
-  // TODO: connect to Go backend (GET /api/leaderboard?category=...)
-  try {
-    if (process.env.NEXT_PUBLIC_API_URL) {
-      const url = category && category !== "all" 
-        ? `${API_BASE_URL}/leaderboard?category=${encodeURIComponent(category)}`
-        : `${API_BASE_URL}/leaderboard`;
-      const res = await fetch(url, { next: { revalidate: 5 } });
-      if (res.ok) return await res.json();
-    }
-  } catch (err) {
-    console.warn("Leaderboard fallback:", err);
-  }
-  return [];
-}
-
-export async function fetchTopProduct(): Promise<Product | null> {
-  // TODO: connect to Go backend (GET /api/leaderboard/top)
-  try {
-    if (process.env.NEXT_PUBLIC_API_URL) {
-      const res = await fetch(`${API_BASE_URL}/leaderboard/top`, { next: { revalidate: 5 } });
-      if (res.ok) return await res.json();
-    }
-  } catch (err) {
-    console.warn("Top product fallback:", err);
-  }
-  return null;
-}
 
 export const INITIAL_CATEGORIES: Category[] = [
   { id: "ai-agents-infrastructure", slug: "ai-agents-infrastructure", name: "AI Agents & Infrastructure", description: "Autonomous agents, LLM tools, workflows, and compute platforms", iconName: "Bot", productCount: 0, topBid: 0 },
@@ -86,21 +44,111 @@ export const INITIAL_CATEGORIES: Category[] = [
   { id: "other", slug: "other", name: "Other", description: "Experimental products and unique digital projects", iconName: "Folder", productCount: 0, topBid: 0 },
 ];
 
+/**
+ * Fetch all categories from backend (GET /api/categories)
+ */
 export async function fetchCategories(): Promise<Category[]> {
-  // TODO: connect to Go backend (GET /api/categories)
   try {
-    if (process.env.NEXT_PUBLIC_API_URL) {
-      const res = await fetch(`${API_BASE_URL}/categories`, { next: { revalidate: 30 } });
-      if (res.ok) return await res.json();
+    const res = await fetch(`${API_BASE_URL}/categories`, { next: { revalidate: 30 } });
+    if (res.ok) {
+      const data: { categories: BackendCategory[] } = await res.json();
+      if (Array.isArray(data.categories) && data.categories.length > 0) {
+        return data.categories.map((cat) => {
+          const match = INITIAL_CATEGORIES.find((c) => c.slug === cat.slug);
+          return {
+            id: String(cat.id),
+            slug: cat.slug,
+            name: cat.name,
+            description: match?.description || `${cat.name} ranking leaderboard`,
+            iconName: match?.iconName || "Folder",
+            productCount: 0,
+            topBid: 0,
+          };
+        });
+      }
     }
   } catch (err) {
-    console.warn("Categories fallback:", err);
+    console.warn("Categories API offline/fallback:", err);
   }
   return INITIAL_CATEGORIES;
 }
 
+/**
+ * Fetch leaderboard bids from backend (GET /api/leaderboard/all)
+ */
+export async function fetchLeaderboard(category?: string): Promise<Product[]> {
+  try {
+    const url =
+      category && category !== "all"
+        ? `${API_BASE_URL}/leaderboard/all?category=${encodeURIComponent(category)}`
+        : `${API_BASE_URL}/leaderboard/all`;
+
+    const res = await fetch(url, { next: { revalidate: 5 } });
+    if (res.ok) {
+      const data: { leaderboard: BackendLeaderboardEntry[] } = await res.json();
+      if (Array.isArray(data.leaderboard)) {
+        return data.leaderboard.map((entry) => ({
+          id: String(entry.bid_id),
+          name: entry.name,
+          tagline: entry.tagline || "",
+          url: entry.handle_or_url,
+          handle: entry.handle_or_url,
+          iconUrl: entry.logo_url || "",
+          category: String(entry.category_id),
+          bidAmount: entry.amount,
+          rank: entry.rank,
+          createdAt: new Date().toISOString(),
+          clickCount: 0,
+        }));
+      }
+    }
+  } catch (err) {
+    console.warn("Leaderboard API offline/fallback:", err);
+  }
+  return [];
+}
+
+/**
+ * Fetch top rank product (#1)
+ */
+export async function fetchTopProduct(): Promise<Product | null> {
+  try {
+    const leaderboard = await fetchLeaderboard();
+    return leaderboard[0] || null;
+  } catch (err) {
+    console.warn("Top product fallback:", err);
+  }
+  return null;
+}
+
+/**
+ * Compute aggregate market statistics from live leaderboard
+ */
+export async function fetchMarketStats(): Promise<MarketStats> {
+  try {
+    const products = await fetchLeaderboard();
+    const totalVolume = products.reduce((acc, p) => acc + (p.bidAmount || 0), 0);
+    return {
+      liveCount: products.length,
+      totalBids: products.length,
+      totalVolume,
+      visitorsToday: 0,
+    };
+  } catch (err) {
+    console.warn("Market stats fallback:", err);
+  }
+  return {
+    liveCount: 0,
+    totalBids: 0,
+    totalVolume: 0,
+    visitorsToday: 0,
+  };
+}
+
+/**
+ * Fetch live daily board
+ */
 export async function fetchDailyBoard(date?: string): Promise<DailyBoard> {
-  // TODO: connect to Go backend (GET /api/daily?date=...)
   const today = new Date();
   const dateFormatted = today.toLocaleDateString("en-US", {
     month: "long",
@@ -108,51 +156,137 @@ export async function fetchDailyBoard(date?: string): Promise<DailyBoard> {
     year: "numeric",
   });
 
-  try {
-    if (process.env.NEXT_PUBLIC_API_URL) {
-      const url = date ? `${API_BASE_URL}/daily?date=${date}` : `${API_BASE_URL}/daily/today`;
-      const res = await fetch(url, { next: { revalidate: 10 } });
-      if (res.ok) return await res.json();
-    }
-  } catch (err) {
-    console.warn("Daily board fallback:", err);
-  }
+  const products = await fetchLeaderboard();
+  const topBid = products[0]?.bidAmount ?? 0;
+  const topProduct = products[0] ?? null;
 
   return {
-    date: today.toISOString().split("T")[0],
+    date: date || today.toISOString().split("T")[0],
     formattedDate: dateFormatted,
     isLive: true,
-    listingCount: 0,
-    topBid: 0,
-    topProduct: null,
-    bids: [],
+    listingCount: products.length,
+    topBid,
+    topProduct,
+    bids: products,
   };
 }
 
+/**
+ * Fetch historical days
+ */
 export async function fetchHistoricalDays(): Promise<DailyBoard[]> {
-  // TODO: connect to Go backend (GET /api/daily/history)
-  try {
-    if (process.env.NEXT_PUBLIC_API_URL) {
-      const res = await fetch(`${API_BASE_URL}/daily/history`);
-      if (res.ok) return await res.json();
-    }
-  } catch (err) {
-    console.warn("Historical days fallback:", err);
-  }
   return [];
 }
 
-export async function submitBidCheckout(payload: BidPayload): Promise<{ checkoutUrl?: string; success: boolean; message: string }> {
-  // TODO: connect to Go backend -> Dodo Payments hosted checkout session (POST /api/bids/checkout)
-  console.log("Submitting bid payload for Dodo Payments checkout:", payload);
-  
-  // Stubbed placeholder
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
+/**
+ * Live Rank Preview (POST /api/bids/preview)
+ */
+export async function previewBidRank(
+  categorySlugOrId: string | number,
+  amount: number
+): Promise<number> {
+  try {
+    const payload: { category_slug?: string; category_id?: number; amount: number } = {
+      amount,
+    };
+    if (typeof categorySlugOrId === "number") {
+      payload.category_id = categorySlugOrId;
+    } else {
+      payload.category_slug = categorySlugOrId;
+    }
+
+    const res = await fetch(`${API_BASE_URL}/bids/preview`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (res.ok) {
+      const data: RankPreviewResponse = await res.json();
+      return data.predicted_rank || 1;
+    }
+  } catch (err) {
+    console.warn("Rank preview fallback:", err);
+  }
+  return 1;
+}
+
+/**
+ * Resolve or create product (POST /api/products/resolve)
+ */
+export async function resolveProduct(productData: {
+  handleOrURL: string;
+  name: string;
+  tagline?: string;
+  logoURL?: string;
+  categoryID: string;
+  contactEmail?: string;
+}): Promise<ResolveProductResponse | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/products/resolve`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        handle_or_url: productData.handleOrURL,
+        name: productData.name,
+        tagline: productData.tagline || "",
+        logo_url: productData.logoURL || "",
+        category_id: productData.categoryID,
+        contact_email: productData.contactEmail || "",
+      }),
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn("Resolve product error:", err);
+  }
+  return null;
+}
+
+/**
+ * Submit Bid and initiate Dodo Payments checkout session (POST /api/bids/initiate)
+ */
+export async function submitBidCheckout(
+  payload: BidPayload
+): Promise<{ checkoutUrl?: string; bidId?: number; success: boolean; message: string }> {
+  try {
+    const returnURL =
+      typeof window !== "undefined"
+        ? `${window.location.origin}/?payment=success`
+        : "https://productbid.space/?payment=success";
+
+    const res = await fetch(`${API_BASE_URL}/bids/initiate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        handle_or_url: payload.urlOrHandle,
+        name: payload.name,
+        tagline: payload.tagline,
+        category_slug: payload.category,
+        amount: payload.amount,
+        customer_email: payload.email || "",
+        return_url: returnURL,
+      }),
+    });
+
+    if (res.ok) {
+      const data: InitiateBidResponse = await res.json();
+      return {
         success: true,
-        message: `Bid checkout initiated for ${payload.name} at $${payload.amount}. Redirecting to Dodo Payments...`,
-      });
-    }, 600);
-  });
+        checkoutUrl: data.checkout_url,
+        bidId: data.bid_id,
+        message: `Bid created! Redirecting to secure Dodo Payments checkout for $${payload.amount}...`,
+      };
+    } else {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || `HTTP Error ${res.status}`);
+    }
+  } catch (err: any) {
+    console.error("submitBidCheckout error:", err);
+    return {
+      success: false,
+      message: err.message || "Failed to initiate payment session. Please try again.",
+    };
+  }
 }

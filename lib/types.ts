@@ -48,3 +48,49 @@ export interface BidPayload {
   amount: number;
   email?: string;
 }
+
+export interface BackendCategory {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+export interface BackendLeaderboardEntry {
+  rank: number;
+  bid_id: number;
+  product_id: number;
+  name: string;
+  tagline: string;
+  logo_url: string;
+  handle_or_url: string;
+  category_id: number;
+  amount: number;
+}
+
+export interface ResolveProductResponse {
+  product: {
+    id: number;
+    name: string;
+    handle_or_url: string;
+    tagline: string;
+    logo_url: string;
+    category_id: number;
+    contact_email: string;
+  };
+  existed: boolean;
+}
+
+export interface InitiateBidResponse {
+  success: boolean;
+  checkout_url: string;
+  bid_id: number;
+  dodo_session_id?: string;
+  product_id?: number;
+  amount?: number;
+}
+
+export interface RankPreviewResponse {
+  predicted_rank: number;
+  category_id: number;
+  amount: number;
+}

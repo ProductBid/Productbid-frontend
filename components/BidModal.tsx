@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Globe, DollarSign, Sparkles, CheckCircle2, ArrowRight, Loader2 } from "lucide-react";
-import { submitBidCheckout, INITIAL_CATEGORIES } from "@/lib/api";
+import { submitBidCheckout, previewBidRank, INITIAL_CATEGORIES } from "@/lib/api";
 
 interface BidModalContextType {
   isOpen: boolean;
@@ -43,8 +43,20 @@ export function BidModalProvider({ children }: { children: React.ReactNode }) {
   const [tagline, setTagline] = useState("");
   const [category, setCategory] = useState("developer-tools");
   const [amount, setAmount] = useState<number | "">(3);
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [predictedRank, setPredictedRank] = useState<number>(1);
+  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // Live Rank Preview
+  useEffect(() => {
+    if (typeof amount === "number" && amount >= 3 && category) {
+      previewBidRank(category, amount).then((rank) => {
+        setPredictedRank(rank);
+      });
+    }
+  }, [category, amount]);
 
   const openBidModal = (initialData?: { urlOrHandle?: string; category?: string; initialAmount?: number }) => {
     if (initialData?.urlOrHandle) setUrlOrHandle(initialData.urlOrHandle);
@@ -55,12 +67,14 @@ export function BidModalProvider({ children }: { children: React.ReactNode }) {
       setAmount((prev) => (prev === "" || Number(prev) < 3 ? 3 : prev));
     }
     setSuccessMessage(null);
+    setCheckoutUrl(null);
     setIsOpen(true);
   };
 
   const closeBidModal = () => {
     setIsOpen(false);
     setSuccessMessage(null);
+    setCheckoutUrl(null);
     setIsLoading(false);
   };
 
@@ -87,10 +101,18 @@ export function BidModalProvider({ children }: { children: React.ReactNode }) {
         urlOrHandle: urlOrHandle.trim(),
         category,
         amount: Number(amount),
+        email: email.trim() || undefined,
       });
 
-      if (res.success) {
+      if (res.success && res.checkoutUrl) {
+        setCheckoutUrl(res.checkoutUrl);
         setSuccessMessage(res.message);
+        // Automatically redirect to Dodo Payments hosted checkout
+        if (typeof window !== "undefined") {
+          window.location.href = res.checkoutUrl;
+        }
+      } else {
+        alert(res.message || "Failed to initiate checkout.");
       }
     } catch (err) {
       console.error("Bid error:", err);
@@ -110,16 +132,28 @@ export function BidModalProvider({ children }: { children: React.ReactNode }) {
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-7 h-7" />
               </div>
-              <DialogTitle className="text-2xl font-bold">Ready to Checkout!</DialogTitle>
+              <DialogTitle className="text-2xl font-bold">Redirecting to Checkout...</DialogTitle>
               <p className="text-sm text-pb-text-secondary leading-relaxed px-4">
                 {successMessage}
               </p>
-              <div className="pt-4 flex flex-col gap-2">
+              <div className="pt-4 flex flex-col gap-2.5">
+                {checkoutUrl && (
+                  <Button
+                    asChild
+                    className="w-full bg-pb-primary text-white font-semibold h-11 rounded-xl shadow-sm"
+                  >
+                    <a href={checkoutUrl}>
+                      <span>Open Checkout Directly</span>
+                      <ArrowRight className="w-4 h-4 ml-1.5 inline" />
+                    </a>
+                  </Button>
+                )}
                 <Button
+                  variant="outline"
                   onClick={closeBidModal}
-                  className="w-full bg-pb-primary hover:bg-opacity-90 font-semibold"
+                  className="w-full rounded-xl"
                 >
-                  Done
+                  Close
                 </Button>
                 <p className="text-[11px] text-pb-text-muted">
                   Payments securely processed by Dodo Payments hosted checkout.
@@ -224,7 +258,26 @@ export function BidModalProvider({ children }: { children: React.ReactNode }) {
                   )}
                 </div>
 
-                <div className="rounded-xl bg-pb-primary-soft/50 dark:bg-pb-primary-soft/20 p-3 border border-pb-primary/10">
+                <div>
+                  <label className="block text-xs font-semibold text-pb-text-secondary uppercase tracking-wider mb-1.5">
+                    Receipt Email <span className="text-pb-text-muted font-normal lowercase">(optional)</span>
+                  </label>
+                  <Input
+                    type="email"
+                    placeholder="you@domain.com (for checkout receipt)"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+
+                <div className="rounded-xl bg-pb-primary-soft/50 dark:bg-pb-primary-soft/20 p-3 border border-pb-primary/10 space-y-1.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-pb-text-primary flex items-center gap-1.5">
+                      <span>🎯 Predicted Rank:</span>
+                      <span className="text-pb-primary font-extrabold font-sora">#{predictedRank}</span>
+                    </span>
+                    <span className="text-[10px] text-pb-text-muted uppercase font-bold tracking-wider">Live Preview</span>
+                  </div>
                   <p className="text-xs text-pb-text-secondary leading-relaxed">
                     💡 <strong className="text-pb-text-primary">Rule:</strong> Rank #1 starts at $3. Bidding $3 or more instantly claims the #1 spot. Rank holds until someone bids higher.
                   </p>
