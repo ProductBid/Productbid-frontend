@@ -228,7 +228,7 @@ export default function AboutPage() {
             className="inline-flex items-center gap-1.5 text-pb-text-secondary hover:text-pb-primary transition-colors font-medium"
           >
             <TwitterIcon className="w-3.5 h-3.5 text-pb-primary" />
-            <span>Twitter</span>
+            <span>X</span>
           </a>
           <span className="text-pb-text-muted text-xs select-none">·</span>
           <a
@@ -238,7 +238,7 @@ export default function AboutPage() {
             className="inline-flex items-center gap-1.5 text-pb-text-secondary hover:text-pb-primary transition-colors font-medium"
           >
             <GithubIcon className="w-3.5 h-3.5 text-pb-primary" />
-            <span>Open Source on GitHub</span>
+            <span>GitHub</span>
           </a>
         </div>
       </div>
