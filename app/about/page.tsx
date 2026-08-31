@@ -79,13 +79,13 @@ export default function AboutPage() {
       </div>
 
       {/* "Then it went live" section */}
-      <div className="p-8 rounded-3xl border border-pb-border bg-pb-card shadow-card space-y-6">
+      <div className="p-5 sm:p-8 rounded-3xl border border-pb-border bg-pb-card shadow-card space-y-6">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-pb-primary-soft text-pb-primary flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-pb-primary-soft text-pb-primary flex items-center justify-center shrink-0">
             <Zap className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-sora font-bold text-xl text-pb-text-primary">
+            <h2 className="font-sora font-bold text-lg sm:text-xl text-pb-text-primary">
               Then it went live
             </h2>
             <p className="text-xs text-pb-text-secondary">
@@ -94,10 +94,10 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-2">
           <div className="space-y-2 p-4 rounded-2xl bg-pb-bg/60 border border-pb-border/60">
             <div className="flex items-center gap-2 font-sora font-bold text-sm text-pb-text-primary">
-              <Shield className="w-4 h-4 text-pb-primary" />
+              <Shield className="w-4 h-4 text-pb-primary shrink-0" />
               <span>No Accounts</span>
             </div>
             <p className="text-xs text-pb-text-secondary leading-relaxed">
@@ -107,7 +107,7 @@ export default function AboutPage() {
 
           <div className="space-y-2 p-4 rounded-2xl bg-pb-bg/60 border border-pb-border/60">
             <div className="flex items-center gap-2 font-sora font-bold text-sm text-pb-text-primary">
-              <TrendingUp className="w-4 h-4 text-emerald-500" />
+              <TrendingUp className="w-4 h-4 text-emerald-500 shrink-0" />
               <span>Pure Bidding</span>
             </div>
             <p className="text-xs text-pb-text-secondary leading-relaxed">
@@ -117,7 +117,7 @@ export default function AboutPage() {
 
           <div className="space-y-2 p-4 rounded-2xl bg-pb-bg/60 border border-pb-border/60">
             <div className="flex items-center gap-2 font-sora font-bold text-sm text-pb-text-primary">
-              <Activity className="w-4 h-4 text-sky-500" />
+              <Activity className="w-4 h-4 text-sky-500 shrink-0" />
               <span>Instant Updates</span>
             </div>
             <p className="text-xs text-pb-text-secondary leading-relaxed">
@@ -132,9 +132,9 @@ export default function AboutPage() {
         <h2 className="font-sora font-bold text-xl text-pb-text-primary">
           Market Stats
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
           {/* Card 1: Total bids placed */}
-          <div className="p-6 rounded-2xl border border-pb-border bg-pb-card shadow-subtle space-y-2">
+          <div className="p-5 sm:p-6 rounded-2xl border border-pb-border bg-pb-card shadow-subtle space-y-2">
             <div className="text-xs font-bold uppercase tracking-wider text-pb-text-muted font-sora">
               Total Bids Placed
             </div>
@@ -147,7 +147,7 @@ export default function AboutPage() {
           </div>
 
           {/* Card 2: Live listings today */}
-          <div className="p-6 rounded-2xl border border-pb-border bg-pb-card shadow-subtle space-y-2">
+          <div className="p-5 sm:p-6 rounded-2xl border border-pb-border bg-pb-card shadow-subtle space-y-2">
             <div className="text-xs font-bold uppercase tracking-wider text-pb-text-muted font-sora">
               Live Listings Today
             </div>
@@ -160,7 +160,7 @@ export default function AboutPage() {
           </div>
 
           {/* Card 3: Total volume */}
-          <div className="p-6 rounded-2xl border border-pb-border bg-pb-card shadow-subtle space-y-2">
+          <div className="p-5 sm:p-6 rounded-2xl border border-pb-border bg-pb-card shadow-subtle space-y-2">
             <div className="text-xs font-bold uppercase tracking-wider text-pb-text-muted font-sora">
               Total Volume
             </div>
@@ -175,7 +175,7 @@ export default function AboutPage() {
       </div>
 
       {/* Community Thank-You Card */}
-      <div className="p-8 rounded-3xl bg-pb-primary-soft/60 dark:bg-pb-primary-soft/20 border border-pb-primary/20 space-y-4">
+      <div className="p-5 sm:p-8 rounded-3xl bg-pb-primary-soft/60 dark:bg-pb-primary-soft/20 border border-pb-primary/20 space-y-4">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-xl bg-pb-primary text-white dark:text-[#15131F] flex items-center justify-center shadow-sm">
             <Heart className="w-5 h-5 fill-current" />

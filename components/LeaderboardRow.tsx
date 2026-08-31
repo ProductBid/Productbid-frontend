@@ -73,7 +73,7 @@ export function LeaderboardRow({
     <>
       <div
         className={cn(
-          "group relative flex items-center justify-between p-4 sm:p-5 rounded-2xl border transition-all duration-150 mb-3",
+          "group relative flex items-center justify-between p-3.5 sm:p-5 rounded-2xl border transition-all duration-150 mb-3",
           // Card styling
           "bg-pb-card border-pb-border hover:border-pb-primary/40 hover:shadow-card",
           // Rank #1 left accent
@@ -82,12 +82,12 @@ export function LeaderboardRow({
             : "border-l-4 border-l-transparent hover:border-l-pb-border"
         )}
       >
-        <div className="flex items-center space-x-3.5 sm:space-x-5 min-w-0 flex-1 mr-3 sm:mr-4">
+        <div className="flex items-center space-x-2.5 sm:space-x-4 min-w-0 flex-1 mr-2 sm:mr-4">
           {/* Rank Number */}
-          <div className="shrink-0 flex items-center justify-center">
+          <div className="shrink-0 w-6 sm:w-8 flex items-center justify-center">
             <span
               className={cn(
-                "font-sora font-extrabold text-base sm:text-lg tabular-nums tracking-tight",
+                "font-sora font-extrabold text-sm sm:text-lg tabular-nums tracking-tight",
                 isRankOne
                   ? "text-pb-primary"
                   : "text-pb-text-muted group-hover:text-pb-text-secondary"
@@ -98,7 +98,7 @@ export function LeaderboardRow({
           </div>
 
           {/* Logo / Placeholder icon */}
-          <div className="shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-pb-primary-soft/60 dark:bg-pb-primary-soft/20 border border-pb-primary/10 flex items-center justify-center text-pb-primary font-sora font-bold text-base sm:text-lg overflow-hidden">
+          <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-pb-primary-soft/60 dark:bg-pb-primary-soft/20 border border-pb-primary/10 flex items-center justify-center text-pb-primary font-sora font-bold text-sm sm:text-lg overflow-hidden">
             {hasValidLogo ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -114,19 +114,19 @@ export function LeaderboardRow({
 
           {/* Product Details */}
           <div className="min-w-0 flex-1 space-y-0.5">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1.5 sm:space-x-2">
               <a
                 href={product.url.startsWith("http") ? product.url : `https://${product.url}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-sora font-bold text-base text-pb-text-primary group-hover:text-pb-primary transition-colors truncate flex items-center gap-1.5"
+                className="font-sora font-bold text-sm sm:text-base text-pb-text-primary group-hover:text-pb-primary transition-colors truncate flex items-center gap-1 sm:gap-1.5"
               >
                 <span className="truncate">{product.name}</span>
-                <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 text-pb-primary shrink-0 transition-opacity" />
+                <ExternalLink className="w-3 h-3 sm:w-3.5 sm:h-3.5 opacity-0 group-hover:opacity-100 text-pb-primary shrink-0 transition-opacity" />
               </a>
 
               {isRankOne && (
-                <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-pb-primary-soft text-pb-primary text-[10px] font-bold uppercase tracking-wider">
+                <span className="shrink-0 inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-pb-primary-soft text-pb-primary text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
                   <Sparkles className="w-2.5 h-2.5" />
                   #1 Spot
                 </span>
@@ -138,7 +138,7 @@ export function LeaderboardRow({
             </p>
 
             {/* Meta text */}
-            <div className="flex items-center space-x-2 text-[11px] text-pb-text-muted pt-0.5">
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[10px] sm:text-[11px] text-pb-text-muted pt-0.5">
               <span>{formatRelativeTime(product.createdAt)}</span>
               <span>·</span>
               <span className="capitalize">{product.category}</span>
@@ -149,17 +149,17 @@ export function LeaderboardRow({
         </div>
 
         {/* Right Section: Bid Amount & 3-dot Menu */}
-        <div className="shrink-0 flex items-center space-x-3 sm:space-x-4">
+        <div className="shrink-0 flex items-center space-x-2 sm:space-x-3.5">
           <div className="text-right">
             <span
               className={cn(
-                "font-sora font-extrabold text-base sm:text-xl tracking-tight",
+                "font-sora font-extrabold text-sm sm:text-xl tracking-tight",
                 isRankOne ? "text-pb-primary" : "text-pb-text-primary"
               )}
             >
               {formatCurrency(product.bidAmount)}
             </span>
-            <div className="text-[10px] font-medium text-pb-text-muted uppercase tracking-wider">
+            <div className="text-[9px] sm:text-[10px] font-medium text-pb-text-muted uppercase tracking-wider">
               {isRankOne ? "Top Bid" : "Bid"}
             </div>
           </div>
@@ -169,7 +169,7 @@ export function LeaderboardRow({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="p-1.5 sm:p-2 rounded-xl text-pb-text-muted hover:text-pb-text-primary hover:bg-pb-bg border border-transparent hover:border-pb-border transition-colors cursor-pointer"
+                className="p-1 sm:p-1.5 rounded-lg text-pb-text-muted hover:text-pb-text-primary hover:bg-pb-bg border border-transparent hover:border-pb-border transition-colors cursor-pointer"
                 title="Bid options"
               >
                 <MoreHorizontal className="w-4 h-4 sm:w-4.5 sm:h-4.5" />

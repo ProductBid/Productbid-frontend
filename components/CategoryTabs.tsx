@@ -106,12 +106,12 @@ export function CategoryTabs({
 
   return (
     <div className="border-b border-pb-border mb-6">
-      <div className="flex items-center space-x-1 sm:space-x-2 overflow-x-auto custom-scrollbar pb-1">
+      <div className="flex items-center space-x-1 sm:space-x-2 overflow-x-auto custom-scrollbar pb-1.5 scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0">
         {/* "All Categories" Tab */}
         <button
           onClick={() => onSelectCategory("all")}
           className={cn(
-            "relative px-4 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors rounded-lg shrink-0",
+            "relative px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors rounded-lg shrink-0",
             activeCategory === "all"
               ? "text-pb-primary font-bold"
               : "text-pb-text-secondary hover:text-pb-text-primary hover:bg-pb-primary-soft/40"
@@ -131,7 +131,7 @@ export function CategoryTabs({
               key={cat.slug}
               onClick={() => onSelectCategory(cat.slug)}
               className={cn(
-                "relative px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors rounded-lg shrink-0",
+                "relative px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors rounded-lg shrink-0",
                 isActive
                   ? "text-pb-primary font-bold"
                   : "text-pb-text-secondary hover:text-pb-text-primary hover:bg-pb-primary-soft/40"
@@ -151,7 +151,7 @@ export function CategoryTabs({
             <DropdownMenuTrigger asChild>
               <button
                 className={cn(
-                  "relative flex items-center space-x-1.5 px-4 py-2.5 text-sm font-medium whitespace-nowrap rounded-lg transition-colors shrink-0 outline-none",
+                  "relative flex items-center space-x-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium whitespace-nowrap rounded-lg transition-colors shrink-0 outline-none",
                   isOverflowActive
                     ? "text-pb-primary font-bold"
                     : "text-pb-text-secondary hover:text-pb-text-primary hover:bg-pb-primary-soft/40"
@@ -169,7 +169,7 @@ export function CategoryTabs({
             <DropdownMenuContent
               align="end"
               sideOffset={8}
-              className="w-72 sm:w-80 max-h-96 overflow-hidden flex flex-col p-2 bg-pb-card border border-pb-border shadow-2xl rounded-2xl"
+              className="w-[calc(100vw-2rem)] sm:w-80 max-w-sm max-h-96 overflow-hidden flex flex-col p-2 bg-pb-card border border-pb-border shadow-2xl rounded-2xl"
             >
               <div className="px-2.5 py-1.5 flex items-center justify-between">
                 <DropdownMenuLabel className="p-0 text-xs font-bold text-pb-text-primary font-sora">

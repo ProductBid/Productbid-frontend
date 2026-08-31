@@ -32,7 +32,7 @@ export default function CategoriesPage() {
         </div>
 
         {/* Live stats line */}
-        <div className="flex items-center space-x-2 text-xs text-pb-text-secondary">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-pb-text-secondary">
           <span className="flex items-center gap-1.5 font-medium">
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
             <strong className="text-pb-text-primary">{formatNumber(categories.length)}</strong> active categories
