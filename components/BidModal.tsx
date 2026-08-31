@@ -84,8 +84,10 @@ export function BidModalProvider({ children }: { children: React.ReactNode }) {
   const isCategoryValid = category.trim().length > 0;
   const isTaglineValid = tagline.trim().length > 0;
   const isAmountValid = typeof amount === "number" && !isNaN(amount) && amount >= 3;
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
-  const isFormValid = isUrlValid && isNameValid && isCategoryValid && isTaglineValid && isAmountValid;
+  const isFormValid =
+    isUrlValid && isNameValid && isCategoryValid && isTaglineValid && isAmountValid && isEmailValid;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,7 +103,7 @@ export function BidModalProvider({ children }: { children: React.ReactNode }) {
         urlOrHandle: urlOrHandle.trim(),
         category,
         amount: Number(amount),
-        email: email.trim() || undefined,
+        email: email.trim(),
       });
 
       if (res.success && res.checkoutUrl) {
@@ -260,14 +262,20 @@ export function BidModalProvider({ children }: { children: React.ReactNode }) {
 
                 <div>
                   <label className="block text-xs font-semibold text-pb-text-secondary uppercase tracking-wider mb-1.5">
-                    Receipt Email <span className="text-pb-text-muted font-normal lowercase">(optional)</span>
+                    Receipt Email
                   </label>
                   <Input
+                    required
                     type="email"
                     placeholder="you@domain.com (for checkout receipt)"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
+                  {email.trim().length > 0 && !isEmailValid && (
+                    <p className="text-[11px] text-red-500 mt-1 font-medium">
+                      Please enter a valid email address.
+                    </p>
+                  )}
                 </div>
 
                 <div className="rounded-xl bg-pb-primary-soft/50 dark:bg-pb-primary-soft/20 p-3 border border-pb-primary/10 space-y-1.5">

@@ -11,6 +11,7 @@ interface LeaderboardTableProps {
   category?: string;
   emptyTitle?: string;
   emptySubtitle?: string;
+  onDeleted?: (deletedBidId: string) => void;
 }
 
 export function LeaderboardTable({
@@ -18,6 +19,7 @@ export function LeaderboardTable({
   category,
   emptyTitle = "No bids yet. Be the first to claim #1.",
   emptySubtitle = "No products have bid on this board yet. Place a bid to take the top spot.",
+  onDeleted,
 }: LeaderboardTableProps) {
   const { openBidModal } = useBidModal();
 
@@ -62,6 +64,7 @@ export function LeaderboardTable({
           key={product.id || idx}
           product={product}
           isRankOne={idx === 0}
+          onDeleted={onDeleted}
         />
       ))}
     </div>

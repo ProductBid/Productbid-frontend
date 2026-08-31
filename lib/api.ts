@@ -290,3 +290,33 @@ export async function submitBidCheckout(
     };
   }
 }
+
+/**
+ * Permanently delete a bid (DELETE /api/bids/:id)
+ */
+export async function deleteBid(
+  bidId: string | number
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/bids/${bidId}`, {
+      method: "DELETE",
+    });
+
+    if (res.ok) {
+      const data = await res.json().catch(() => ({ success: true, message: "Bid deleted successfully" }));
+      return {
+        success: true,
+        message: data.message || "Bid deleted successfully",
+      };
+    } else {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || `HTTP Error ${res.status}`);
+    }
+  } catch (err: any) {
+    console.error("deleteBid error:", err);
+    return {
+      success: false,
+      message: err.message || "Failed to delete bid. Please try again.",
+    };
+  }
+}

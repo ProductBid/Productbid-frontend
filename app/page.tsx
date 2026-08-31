@@ -13,13 +13,18 @@ export default function BoardPage() {
   const { data: categories = INITIAL_CATEGORIES } = useSWR("categories", fetchCategories, {
     fallbackData: INITIAL_CATEGORIES,
   });
-  const { data: products = [] } = useSWR(
+  const { data: products = [], mutate: mutateLeaderboard } = useSWR(
     ["leaderboard", selectedCategory],
     () => fetchLeaderboard(selectedCategory)
   );
-  const { data: topProduct } = useSWR("top-product", fetchTopProduct);
+  const { data: topProduct, mutate: mutateTopProduct } = useSWR("top-product", fetchTopProduct);
 
   const topPrice = topProduct?.bidAmount ?? 0;
+
+  const handleDeleted = () => {
+    mutateLeaderboard();
+    mutateTopProduct();
+  };
 
   return (
     <div className="space-y-8">
@@ -39,6 +44,7 @@ export default function BoardPage() {
         <LeaderboardTable
           products={products}
           category={selectedCategory === "all" ? undefined : selectedCategory}
+          onDeleted={handleDeleted}
           emptyTitle="No bids yet. Be the first to claim #1."
           emptySubtitle="No products have bid on this board yet. Name your price and claim the top rank instantly."
         />

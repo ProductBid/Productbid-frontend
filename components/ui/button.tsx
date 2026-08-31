@@ -10,6 +10,8 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-pb-primary text-white dark:text-[#15131F] font-semibold hover:opacity-90 shadow-sm",
+        destructive:
+          "bg-red-600 text-white hover:bg-red-700 font-semibold shadow-sm",
         navy:
           "bg-[#1F1B3A] text-white hover:bg-[#2B2650] dark:bg-[#B7AEFA] dark:text-[#15131F] dark:hover:bg-[#C8C1FB] font-semibold shadow-sm",
         secondary:
