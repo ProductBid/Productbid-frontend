@@ -11,7 +11,7 @@ import {
   RankPreviewResponse,
 } from "./types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8080";
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8080"}/api`;
 
 export const INITIAL_CATEGORIES: Category[] = [
   { id: "ai-agents-infrastructure", slug: "ai-agents-infrastructure", name: "AI Agents & Infrastructure", description: "Autonomous agents, LLM tools, workflows, and compute platforms", iconName: "Bot", productCount: 0, topBid: 0 },
