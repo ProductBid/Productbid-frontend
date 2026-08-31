@@ -217,17 +217,17 @@ export default function AboutPage() {
 
       {/* Builder Credit Line & Links */}
       <div className="text-center pt-2 pb-6 space-y-2.5">
-        <p className="text-xs text-pb-text-muted font-medium">
+        <p className="text-sm text-pb-text-muted font-medium">
           Built by <span className="text-pb-text-secondary font-semibold">Aditya Singh</span>
         </p>
-        <div className="flex items-center justify-center gap-3.5 text-xs">
+        <div className="flex items-center justify-center gap-4 text-sm">
           <a
             href="https://x.com/AdityaS888"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-pb-text-secondary hover:text-pb-primary transition-colors font-medium"
           >
-            <TwitterIcon className="w-3.5 h-3.5 text-pb-primary" />
+            <TwitterIcon className="w-4.5 h-4.5 text-pb-primary" />
             <span>X</span>
           </a>
           <span className="text-pb-text-muted text-xs select-none">·</span>
@@ -235,9 +235,9 @@ export default function AboutPage() {
             href="https://github.com/ProductBid"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-pb-text-secondary hover:text-pb-primary transition-colors font-medium"
+            className="inline-flex items-center gap-2 text-pb-text-secondary hover:text-pb-primary transition-colors font-medium"
           >
-            <GithubIcon className="w-3.5 h-3.5 text-pb-primary" />
+            <GithubIcon className="w-4.5 h-4.5 text-pb-primary" />
             <span>GitHub</span>
           </a>
         </div>
