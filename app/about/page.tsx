@@ -182,7 +182,7 @@ export default function AboutPage() {
           </div>
           <div>
             <h3 className="font-sora font-bold text-lg text-pb-text-primary">
-              Built for makers, hackers & products
+              Built for makers, Indie hackers, solo devs, and VC-backed founders.
             </h3>
             <p className="text-xs text-pb-text-secondary">
               Thank you for being part of the open bidding movement.
