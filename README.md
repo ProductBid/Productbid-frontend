@@ -1,3 +1,23 @@
+<div align="center">
+
+<img src="./assets/logo.png" alt="ProductBid" width="100%"/>
+
+<br/>
+<br/>
+
+## Bid Higher. Get Seen.
+
+<br/>
+
+An open source platform where startups compete for visibility
+and users discover the products worth watching.
+
+
+</div>
+
+---
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
