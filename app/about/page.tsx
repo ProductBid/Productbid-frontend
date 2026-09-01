@@ -54,6 +54,20 @@ function TwitterIcon({ className }: { className?: string }) {
   );
 }
 
+function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.114 20.452H3.558V9h3.556v11.452z" />
+    </svg>
+  );
+}
+
 export default function AboutPage() {
   const { data: stats } = useSWR("market-stats", fetchMarketStats);
   const { openBidModal } = useBidModal();
@@ -216,30 +230,40 @@ export default function AboutPage() {
       </div>
 
       {/* Builder Credit Line & Links */}
-      <div className="text-center pt-2 pb-6 space-y-2.5">
+      <div className="text-center pt-2 pb-6 space-y-3">
         <p className="text-sm text-pb-text-muted font-medium">
           Built by <span className="text-pb-text-secondary font-semibold">Aditya Singh</span>
         </p>
-        <div className="flex items-center justify-center gap-4 text-sm">
-          <a
-            href="https://x.com/AdityaS888"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-pb-text-secondary hover:text-pb-primary transition-colors font-medium"
-          >
-            <TwitterIcon className="w-4.5 h-4.5 text-pb-primary" />
-            <span>X</span>
-          </a>
-          <span className="text-pb-text-muted text-xs select-none">·</span>
+        <div className="flex items-center justify-center gap-3">
           <a
             href="https://github.com/ProductBid"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-pb-text-secondary hover:text-pb-primary transition-colors font-medium"
+            className="w-9 h-9 rounded-xl bg-pb-card border border-pb-border flex items-center justify-center text-pb-text-secondary hover:text-pb-primary hover:border-pb-primary/40 transition-colors"
+            aria-label="GitHub"
           >
-            <GithubIcon className="w-4.5 h-4.5 text-pb-primary" />
-            <span>GitHub</span>
+            <GithubIcon className="w-4 h-4" />
           </a>
+
+          <a
+             href="https://x.com/AdityaS888"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-9 h-9 rounded-xl bg-pb-card border border-pb-border flex items-center justify-center text-pb-text-secondary hover:text-pb-primary hover:border-pb-primary/40 transition-colors"
+            aria-label="X (Twitter)"
+          >
+            <TwitterIcon className="w-4 h-4" />
+          </a>
+
+          <a
+          href="https://www.linkedin.com/in/aditya-singh0811b/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-9 h-9 rounded-xl bg-pb-card border border-pb-border flex items-center justify-center text-pb-text-secondary hover:text-pb-primary hover:border-pb-primary/40 transition-colors"
+            aria-label="LinkedIn"
+          >
+            <LinkedInIcon className="w-4 h-4" />
+            </a>
         </div>
       </div>
     </div>
