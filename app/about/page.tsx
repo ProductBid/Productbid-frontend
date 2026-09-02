@@ -88,7 +88,8 @@ export default function AboutPage() {
           About
         </h1>
         <p className="text-lg sm:text-xl text-pb-text-secondary leading-relaxed">
-          ProductBid is an open source project designed to help startups get visibility through a bidding-based product discovery system.
+          ProductBid is an open source project designed to help startups get
+          visibility through a bidding-based product discovery system.
         </p>
       </div>
 
@@ -103,7 +104,8 @@ export default function AboutPage() {
               Then it went live
             </h2>
             <p className="text-xs text-pb-text-secondary">
-              A transparent, open leaderboard where products compete purely on bids.
+              A transparent, open leaderboard where products compete purely on
+              bids.
             </p>
           </div>
         </div>
@@ -115,7 +117,8 @@ export default function AboutPage() {
               <span>No Accounts</span>
             </div>
             <p className="text-xs text-pb-text-secondary leading-relaxed">
-              Anyone can bid by simply submitting a product URL or handle. Zero signups, passwords, or cookies needed.
+              Anyone can bid by simply submitting a product URL or handle. Zero
+              signups, passwords, or cookies needed.
             </p>
           </div>
 
@@ -125,7 +128,8 @@ export default function AboutPage() {
               <span>Pure Bidding</span>
             </div>
             <p className="text-xs text-pb-text-secondary leading-relaxed">
-              Highest bid holds rank #1. No algorithmic curation, no ad networks, and no decay timers.
+              Highest bid holds rank #1. No algorithmic curation, no ad
+              networks, and no decay timers.
             </p>
           </div>
 
@@ -135,7 +139,8 @@ export default function AboutPage() {
               <span>Instant Updates</span>
             </div>
             <p className="text-xs text-pb-text-secondary leading-relaxed">
-              When a bid is confirmed via Dodo Payments, the leaderboard refreshes automatically across all viewers.
+              When a bid is confirmed via Dodo Payments, the leaderboard
+              refreshes automatically across all viewers.
             </p>
           </div>
         </div>
@@ -196,7 +201,8 @@ export default function AboutPage() {
           </div>
           <div>
             <h3 className="font-sora font-bold text-lg text-pb-text-primary">
-              Built for makers, Indie hackers, solo devs, and VC-backed founders.
+              Built for makers, Indie hackers, solo devs, and VC-backed
+              founders.
             </h3>
             <p className="text-xs text-pb-text-secondary">
               Thank you for being part of the open bidding movement.
@@ -205,7 +211,10 @@ export default function AboutPage() {
         </div>
 
         <p className="text-sm text-pb-text-secondary leading-relaxed">
-          ProductBid is designed to give every product — from independent weekend projects to venture-backed startups — a direct, transparent way to be discovered without needing ad accounts or review bottlenecks.
+          ProductBid is designed to give every product — from independent
+          weekend projects to venture-backed startups — a direct, transparent
+          way to be discovered without needing ad accounts or review
+          bottlenecks.
         </p>
 
         <div className="pt-2 flex flex-wrap items-center gap-3">
@@ -232,8 +241,13 @@ export default function AboutPage() {
       {/* Builder Credit Line & Links */}
       <div className="text-center pt-2 pb-6 space-y-3">
         <p className="text-sm text-pb-text-muted font-medium">
-          Built by <span className="text-pb-text-secondary font-semibold">Aditya Singh</span>
+          Built by{" "}
+          <span className="text-pb-text-secondary font-semibold">
+            Aditya Singh
+          </span>
         </p>
+
+
         <div className="flex items-center justify-center gap-3">
           <a
             href="https://github.com/ProductBid"
@@ -246,7 +260,7 @@ export default function AboutPage() {
           </a>
 
           <a
-             href="https://x.com/AdityaS888"
+            href="https://x.com/AdityaS888"
             target="_blank"
             rel="noopener noreferrer"
             className="w-9 h-9 rounded-xl bg-pb-card border border-pb-border flex items-center justify-center text-pb-text-secondary hover:text-pb-primary hover:border-pb-primary/40 transition-colors"
@@ -256,14 +270,14 @@ export default function AboutPage() {
           </a>
 
           <a
-          href="https://www.linkedin.com/in/aditya-singh0811b/"
+            href="https://www.linkedin.com/in/aditya-singh0811b/"
             target="_blank"
             rel="noopener noreferrer"
             className="w-9 h-9 rounded-xl bg-pb-card border border-pb-border flex items-center justify-center text-pb-text-secondary hover:text-pb-primary hover:border-pb-primary/40 transition-colors"
             aria-label="LinkedIn"
           >
             <LinkedInIcon className="w-4 h-4" />
-            </a>
+          </a>
         </div>
       </div>
     </div>
